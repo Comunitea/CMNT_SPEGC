@@ -28,9 +28,8 @@ $ sudo apt-get install libreadline-dev
 ```
 
 Clonar repositorio
-> git clone https://github.com/comunitea/cmnt_bo_10.git
+> git clone https://github.com/Comunitea/CMNT_SPEGC.git
 
-O el respositorio que corresponda 
 
 
 - Crear un virtualenv dentro de la carpeta del respositorio. Esto podría ser opcional, obligatorio para desarrollo o servidor de pruebas, tal vez podríamos no hacerlo para un despliegue en producción. Si no está instalado, instalar el paquete de virtualenv. Es necesario tener la versión que se instala con easy_install o con pip, desinstalar el paquete python-virtualenv si fuera necesario e instalarlo con easy_install
@@ -40,9 +39,9 @@ $ sudo easy_install virtualenv
 
 Dentro de la carpeta del repositorio
 ```
-$ cd cmnt_bo_10
+$ cd CMNT_SPEGC
 ```
-O la carpeta que corresponda
+
 ```
 $ virtualenv sandbox --no-setuptools
 ```
@@ -83,42 +82,35 @@ odoo
 $ bin/supervisord
 $ bin/buildout -c [archivo_buildout]
 ```
-- Conectarse al supervisor con localhost:9002 
-- Si fuera necesario hacer update all, se puede parar desde el supervisor y en la consola hacer:
+
 ```
 $ cd bin
 $ ./upgrade_openerp
 ```
-- odoo se lanza en el puerto 9069 (se pude configurar en otro)
+- odoo se lanza en el puerto 8069 (se pude configurar en otro)
 
-## Securizar el acceso al supervisor
-```
-$ sudo apt-get install iptables
-$ sudo iptables -A INPUT -i lo -p tcp --dport 9002 -j ACCEPT
-$ sudo iptables -A INPUT -p tcp --dport 9002 -j DROP
-$ sudo apt-get install iptables-persistent (marcamos "yes" en las preguntas que nos hace al instalarse)
-```
+
 
 ## Configurar Odoo
-Archivo de configuración: etc/openerp.cfg, si sequieren cambiar opciones en  openerp.cfg, no se debe editar el fichero,
-si no añadirlas a la sección [openerp] del buildout.cfg
+Archivo de configuración: etc/odoo.cfg, si sequieren cambiar opciones en  odoo.cfg, no se debe editar el fichero,
+si no añadirlas a la sección [odoo] del buildout.cfg
 y establecer esas opciones .'add_option' = value, donde 'add_option'  y ejecutar buildout otra vez.
 
-Por ejemplo: cambiar el nivel de logging de OpenERP
+Por ejemplo: cambiar el nivel de logging de Odoo
 ```
 'buildout.cfg'
 ...
-[openerp]
+[odoo]
 options.log_handler = [':ERROR']
 ...
 ```
 
-Si se quiere ejecutar más de una instancia de OpenERP, se deben cambiar los puertos,
+Si se quiere ejecutar más de una instancia de Odoo, se deben cambiar los puertos,
 please change ports:
 ```
-openerp_xmlrpc_port = 9069  (8069 default openerp)
-openerp_xmlrpcs_port = 9071 (8071 default openerp)
-supervisor_port = 9002      (9001 default supervisord)
+openerp_xmlrpc_port = 8069  (8069 default odoo)
+openerp_xmlrpcs_port = 8071 (8071 default odoo)
+
 postgres_port = 5434        (5432 default postgres)
 ```
 
@@ -131,7 +123,7 @@ Rastislav Kober, http://www.kybi.sk
 
 ### Para "congelar" una versión de cada módulo y dependencia
 
-Después de jecutar con éxito el buildout, basta utilizar el siguiente comando:
+Después de ejecutar con éxito el buildout, basta utilizar el siguiente comando:
 ```
 $ bin/buildout -o odoo:freeze-to=odoo-freeze.cfg 
 ```
